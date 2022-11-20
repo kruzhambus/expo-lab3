@@ -10,48 +10,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Post } from '../components/Post';
+import data from '../assets/data.json';
 
 export const HomeScreen = ({ navigation }) => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [items, setItems] = React.useState();
-
-  const fetchPosts = () => {
-    setIsLoading(true);
-    axios
-      .get('https://626d62d2e58c6fabe2d4ce66.mockapi.io/posts')
-      .then(({ data }) => {
-        setItems(data);
-      })
-      .catch((err) => {
-        setItems([]);
-        console.log(err);
-        Alert.alert('Ошибка', 'Не удалось получить статьи');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  React.useEffect(fetchPosts, []);
-
-  if (isLoading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 15 }}>Загрузка...</Text>
-      </View>
-    );
-  }
+  const [items, setItems] = React.useState(data);
 
   return (
     <View>
       <FlatList
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={fetchPosts} />}
         data={items}
         renderItem={({ item }) => (
           <TouchableOpacity
